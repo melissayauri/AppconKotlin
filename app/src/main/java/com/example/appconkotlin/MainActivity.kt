@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -26,18 +27,23 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        /*Guardamos el ingreso de texto*/
-        val text = findViewById<EditText>(R.id.editText).text
 
+var editText = findViewById<EditText>(R.id.editText)
         /*Ejecutando el boton*/
         findViewById<Button>(R.id.savebutton).setOnClickListener {
+            /*Guardamos el ingreso de texto*/
+           // var text = findViewById<EditText>(R.id.editText).text.toString()
+            var text = editText.text.toString()
             /*solo imprime cuando no esta vacio*/
             if(text.isNotEmpty()){
                 Log.i("Aplicando lo aprendido", "$text")
-                speaker?.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
-                findViewById<ProgressBar>(R.id.progressBar).visibility = View.GONE
+            }else{
+                text = "Es necesraio ingresar datos"
             }
-
+//            val params = Bundle()
+//            params.putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, 1.5f)
+            speaker?.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
+            editText.setText("")
         }
 
         speaker = TextToSpeech(this, this)
@@ -47,7 +53,12 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     override fun onInit(status: Int) {
         if(status == TextToSpeech.SUCCESS){
-            speaker?.setLanguage(Locale("it","IT"))
+            speaker?.setLanguage(Locale("en","eu"))
+            findViewById<TextView>(R.id.speech).text = "TextToSpeech esta disponible"
+        }else{
+            findViewById<TextView>(R.id.speech).text = "TextToSpeech no esta disponible"
         }
+
+        findViewById<ProgressBar>(R.id.progressBar).visibility = View.GONE
     }
 }
